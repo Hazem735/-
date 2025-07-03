@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>اعرف أكتر</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top right, #e1ecf4, #f8f9fa);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #202124;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin-top: -40px;
+      text-align: center;
+    }
+
+    .logo-text {
+      font-size: 70px;
+      font-weight: 800;
+      color: #0b66c3;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .search-box {
+      width: 100%;
+      max-width: 600px;
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 15px 50px;
+      border-radius: 40px;
+      border: 1px solid #cfd8dc;
+      font-size: 17px;
+      outline: none;
+      background-color: #fff;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.07);
+      transition: 0.3s;
+    }
+
+    .search-input:focus {
+      border-color: #0b66c3;
+      box-shadow: 0 4px 12px rgba(11, 102, 195, 0.2);
+    }
+
+    .search-btn {
+      background: #0b66c3;
+      border: none;
+      border-radius: 30px;
+      padding: 10px 30px;
+      font-size: 15px;
+      cursor: pointer;
+      color: #fff;
+      transition: 0.3s;
+    }
+
+    .search-btn:hover {
+      background-color: #094a87;
+    }
+
+    .search-results {
+      width: 100%;
+      max-width: 700px;
+      margin: 30px auto;
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      text-align: right;
+    }
+
+    .section-title {
+      font-size: 20px;
+      color: #202124;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+    }
+
+    .result {
+      margin-bottom: 25px;
+    }
+
+    .result-title {
+      color: #1a0dab;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .result-url {
+      color: #006621;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .result-description {
+      font-size: 15px;
+      color: #444;
+    }
+
+    .speak-btn {
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <main class="main">
+    <div class="logo">
+      <div class="logo-text">اعرف أكتر</div>
+    </div>
+    <div class="search-box">
+      <input type="text" class="search-input" id="search-input" placeholder="ابحث في الويب أو أدخل عنوان URL">
+    </div>
+    <div class="buttons">
+      <button class="search-btn" onclick="performSearch()">بحث</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </main>
+
+  <script>
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+
+    searchInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') performSearch();
+    });
+
+    function speakText(text) {
+      const synth = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ar-SA';
+      synth.cancel();
+      synth.speak(utterance);
+    }
+
+    function performSearch() {
+      const query = searchInput.value.trim();
+      if (query === '') return;
+      searchResults.style.display = 'block';
+      searchResults.innerHTML = `<p style="text-align:center">جارٍ البحث عن "${query}"...</p>`;
+
+      setTimeout(() => {
+        const results = `
+          <div class="section-title">🔍 نتائج ويب</div>
+          <div class="result">
+            <div>
+              <a href="https://ar.wikipedia.org/wiki/${encodeURIComponent(query)}" class="result-title">ويكيبيديا - ${query}</a>
+              <button class="speak-btn" onclick="speakText('مقالة مفصلة على ويكيبيديا عن ${query}')">🔊</button>
+            </div>
+            <div class="result-url">https://ar.wikipedia.org/wiki/${encodeURIComponent(query)}</div>
+            <div class="result-description">مقالة مفصلة على ويكيبيديا عن ${query}.</div>
+          </div>
+
+          <div class="section-title">📺 فيديوهات YouTube</div>
+          <div class="result">
+            <div>
+              <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(query)}" class="result-title">مشاهدة نتائج الفيديوهات عن ${query}</a>
+              <button class="speak-btn" onclick="speakText('نتائج فيديو من يوتيوب عن ${query}')">🔊</button>
+            </div>
+            <div class="result-url">https://www.youtube.com/results?search_query=${encodeURIComponent(query)}</div>
+            <div class="result-description">نتائج فيديو من YouTube عن "${query}".</div>
+          </div>
+
+          <div class="section-title">🖼️ صور من Google</div>
+          <div class="result">
+            <div>
+              <a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}" class="result-title">عرض صور ${query}</a>
+              <button class="speak-btn" onclick="speakText('تصفح الصور المتعلقة ب ${query}')">🔊</button>
+            </div>
+            <div class="result-url">https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}</div>
+            <div class="result-description">تصفح الصور المتعلقة بـ ${query} من بحث الصور في Google.</div>
+          </div>
+
+          <div class="section-title">🗺️ Google Maps</div>
+          <div class="result">
+            <div>
+              <a href="https://www.google.com/maps/search/${encodeURIComponent(query)}" class="result-title">البحث عن ${query} على الخرائط</a>
+              <button class="speak-btn" onclick="speakText('أماكن مرتبطة ب ${query} على خرائط جوجل')">🔊</button>
+            </div>
+            <div class="result-url">https://www.google.com/maps/search/${encodeURIComponent(query)}</div>
+            <div class="result-description">استعرض مواقع وأماكن مرتبطة بـ ${query} على خرائط جوجل.</div>
+          </div>
+
+          <div class="section-title">🌐 نتائج Google</div>
+          <div class="result">
+            <div>
+              <a href="https://www.google.com/search?q=${encodeURIComponent(query)}" class="result-title">عرض نتائج البحث عن "${query}" في Google</a>
+              <button class="speak-btn" onclick="speakText('نتائج البحث عن ${query} من جوجل')">🔊</button>
+            </div>
+            <div class="result-url">https://www.google.com/search?q=${encodeURIComponent(query)}</div>
+            <div class="result-description">شاهد المزيد من نتائج البحث في Google مباشرة.</div>
+          </div>
+        `;
+        searchResults.innerHTML = results;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
